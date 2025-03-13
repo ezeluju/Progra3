@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Tareas</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            margin: 0;
+            padding: 20px;
+            color: white;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            color: #333;
+        }
+        img {
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #ff4757;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            background: #4c3d3d;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+        li:hover {
+            background: #9707bb;
+        }
+        .completed {
+            text-decoration: line-through;
+            color: gray;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Lista de Tareas</h1>
+        <img src="image.png" alt="Imagen de ejemplo">
+        
+        <form id="taskForm">
+            <label for="taskInput">Nueva Tarea:</label>
+            <input type="text" id="taskInput" placeholder="Escribe una tarea..." required>
+            <button type="submit">Agregar</button>
+        </form>
+        
+        <ul id="taskList"></ul>
+    </div>
+    
+    <script>
+        document.getElementById('taskForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const taskInput = document.getElementById('taskInput');
+            const taskText = taskInput.value.trim();
+            if (taskText !== "") {
+                const li = document.createElement('li');
+                const span = document.createElement('span');
+                span.textContent = taskText;
+                const button = document.createElement('button');
+                button.textContent = "Completar";
+                button.style.background = "#1dd1a1";
+                button.addEventListener('click', function() {
+                    span.classList.toggle('completed');
+                });
+                li.appendChild(span);
+                li.appendChild(button);
+                document.getElementById('taskList').appendChild(li);
+                taskInput.value = "";
+            }
+        });
+    </script>
+</body>
+</html>
