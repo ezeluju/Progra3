@@ -3,113 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Tareas</title>
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            text-align: center;
-            background: linear-gradient(to right, #4facfe, #00f2fe);
-            margin: 0;
-            padding: 20px;
-            color: white;
-        }
-        .container {
-            max-width: 400px;
-            margin: auto;
-            background: rgb(135, 0, 0);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
-        h1 {
-            color: #333;
-        }
-        img {
-            border-radius: 10px;
-            margin-bottom: 10px;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-        input {
-            width: calc(100% - 20px);
-            padding: 10px;
-            margin-top: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        button {
-            background: #ff6b6b;
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: background 0.3s;
-        }
-        button:hover {
-            background: #ff4757;
-        }
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-        li {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 10px 0;
-            padding: 10px;
-            background: #4c3d3d;
-            border-radius: 8px;
-            transition: background 0.3s;
-        }
-        li:hover {
-            background: #9707bb;
-        }
-        .completed {
-            text-decoration: line-through;
-            color: gray;
-        }
-    </style>
+    <title>TODO App</title>
+    <link rel="stylesheet" href="Styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Lista de Tareas</h1>
-        <img src="image.png" alt="Imagen de ejemplo">
+        <div class="header">
+            <h1>Nadiña</h1>
+            <button class="add-category">+</button>
+        </div>
         
-        <form id="taskForm">
-            <label for="taskInput">Nueva Tarea:</label>
-            <input type="text" id="taskInput" placeholder="Escribe una tarea..." required>
-            <button type="submit">Agregar</button>
-        </form>
+        <div class="tabs">
+            <div class="tab active">Boludeces</div>
+            <div class="tab">Mas Boludeces</div>
+        </div>
         
-        <ul id="taskList"></ul>
+        <div class="input-area">
+            <input type="text" placeholder="Agrega tareas">
+            <button class="add-btn">Agregar</button>
+        </div>
+        
+        <div class="tasks">
+            <div class="task">
+                <div class="checkbox"></div>
+                <div class="task-text">Jugar al terraria</div>
+                <button class="delete">×</button>
+            </div>
+        </div>
+        
+        <button class="clear-btn">Borrar completadas</button>
     </div>
     
     <script>
-        document.getElementById('taskForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const taskInput = document.getElementById('taskInput');
-            const taskText = taskInput.value.trim();
-            if (taskText !== "") {
-                const li = document.createElement('li');
-                const span = document.createElement('span');
-                span.textContent = taskText;
-                const button = document.createElement('button');
-                button.textContent = "Completar";
-                button.style.background = "#1dd1a1";
-                button.addEventListener('click', function() {
-                    span.classList.toggle('completed');
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelector('.tab.active').classList.remove('active');
+                    this.classList.add('active');
                 });
-                li.appendChild(span);
-                li.appendChild(button);
-                document.getElementById('taskList').appendChild(li);
-                taskInput.value = "";
+            });
+
+            // Checkbox functionality
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('checkbox')) {
+                    e.target.classList.toggle('checked');
+                    e.target.nextElementSibling.classList.toggle('completed');
+                }
+                if (e.target.classList.contains('delete')) {
+                    e.target.parentElement.remove();
+                }
+            });
+
+            // Clear completed
+            document.querySelector('.clear-btn').addEventListener('click', function() {
+                document.querySelectorAll('.task-text.completed').forEach(task => 
+                    task.parentElement.remove()
+                );
+            });
+
+            // Add task
+            function addTask() {
+                const input = document.querySelector('input');
+                const text = input.value.trim();
+                if (text === '') return;
+                
+                const task = document.createElement('div');
+                task.className = 'task';
+                task.innerHTML = `
+                    <div class="checkbox"></div>
+                    <div class="task-text">${text}</div>
+                    <button class="delete">×</button>
+                `;
+                
+                document.querySelector('.tasks').appendChild(task);
+                input.value = '';
             }
+            
+            document.querySelector('.add-btn').addEventListener('click', addTask);
+            document.querySelector('input').addEventListener('keypress', e => {
+                if (e.key === 'Enter') addTask();
+            });
         });
     </script>
 </body>
